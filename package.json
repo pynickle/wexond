@@ -11,7 +11,7 @@
     "styled-components"
   ],
   "homepage": "https://github.com/wexond/wexond#readme",
-  "main": "build/main.js",
+  "main": "build/main/index.js",
   "author": {
     "name": "Eryk Rakowski",
     "email": "sentialx@gmail.com"
@@ -34,7 +34,7 @@
     "url": "https://github.com/wexond/wexond/issues"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV='dev' node fuse.js",
+    "dev": "gulp watch",
     "build": "node fuse.js",
     "start": "cross-env ENV='dev' electron .",
     "compile-win32": "npm run build && electron-builder -w -p always",
@@ -43,6 +43,9 @@
     "lint": "tslint \"src/**/*.ts*\"",
     "lint-fix": "prettier --write \"src/**/*.ts*\" && tslint \"src/**/*.ts*\" --fix",
     "postinstall": "electron-builder install-app-deps"
+  },
+  "_moduleAliases": {
+    "~": "./build"
   },
   "pre-commit": [
     "lint-fix"
@@ -60,9 +63,14 @@
     "@types/styled-components": "4.1.18",
     "concurrently": "4.1.1",
     "cross-env": "5.2.0",
+    "del": "5.0.0",
     "electron": "6.0.0-beta.15",
     "electron-builder": "21.1.1",
     "fuse-box": "3.7.1",
+    "gulp": "4.0.2",
+    "gulp-htmlmin": "5.0.1",
+    "gulp-terser": "1.2.0",
+    "gulp-typescript": "5.0.1",
     "prettier": "1.18.2",
     "terser": "4.1.2",
     "tslint": "5.18.0",
@@ -84,6 +92,7 @@
     "icojs": "0.13.1",
     "mobx": "5.13.0",
     "mobx-react": "6.1.1",
+    "module-alias": "2.2.0",
     "mouse-hooks": "0.4.1",
     "nedb": "1.8.0",
     "node-vibrant": "3.2.0-alpha",

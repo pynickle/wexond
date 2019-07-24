@@ -1,3 +1,5 @@
+require('module-alias/register');
+
 import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
@@ -15,7 +17,7 @@ import { checkFiles } from '~/utils/files';
 import { DEFAULT_SETTINGS } from '~/constants';
 import { windowManager } from 'node-window-manager';
 
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
+(process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 
 export const log = require('electron-log');
 

@@ -22,6 +22,7 @@ export const requestURL = (url: string) =>
 
       res.on('data', chunk => {
         data += chunk;
+        console.log(data);
       });
 
       res.on('end', () => {

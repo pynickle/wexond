@@ -16,6 +16,7 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "esnext"],
     "experimentalDecorators": true,
+    "skipLibCheck": true,
 
     "baseUrl": "./",
 
@@ -23,5 +24,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

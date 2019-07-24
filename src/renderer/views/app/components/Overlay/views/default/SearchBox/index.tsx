@@ -87,7 +87,7 @@ const onInput = (e: any) => {
   store.overlay.searchBoxValue = e.currentTarget.value;
 };
 
-const onStarClick = async (e: React.MouseEvent) => {
+const onStarClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
 
   if (store.addBookmark.visible) {
@@ -126,12 +126,11 @@ export const SearchBox = observer(() => {
           placeholder="Search or type in URL"
           onKeyPress={onKeyPress}
           onFocus={onInputFocus}
-          onChange={onInput}
+          onInput={onInput}
           onKeyDown={onKeyDown}
           ref={store.overlay.inputRef}
         />
         <ToolbarButton
-          invert
           icon={store.overlay.isBookmarked ? icons.starFilled : icons.star}
           onClick={onStarClick}
           onMouseDown={e => e.stopPropagation()}

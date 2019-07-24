@@ -1,6 +1,6 @@
 import * as Datastore from 'nedb';
 
-import { Favicon } from '~/interfaces';
+import { IFavicon } from '~/interfaces';
 import { requestURL, getPath } from '~/utils';
 import { observable } from 'mobx';
 
@@ -42,9 +42,9 @@ export class FaviconsStore {
     this.load();
   }
 
-  public getFavicons = (query: Favicon = {}) => {
-    return new Promise((resolve: (favicons: Favicon[]) => void, reject) => {
-      this.db.find(query, (err: any, docs: Favicon[]) => {
+  public getFavicons = (query: IFavicon = {}) => {
+    return new Promise((resolve: (favicons: IFavicon[]) => void, reject) => {
+      this.db.find(query, (err: any, docs: IFavicon[]) => {
         if (err) return reject(err);
         resolve(docs);
       });
@@ -89,7 +89,7 @@ export class FaviconsStore {
   };
 
   public async load() {
-    await this.db.find({}, (err: any, docs: Favicon[]) => {
+    await this.db.find({}, (err: any, docs: IFavicon[]) => {
       if (err) return console.warn(err);
 
       docs.forEach(favicon => {
