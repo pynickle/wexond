@@ -1,14 +1,13 @@
 import { platform } from 'os';
 import * as fileIcon from 'extract-file-icon';
 import { ipcMain } from 'electron';
+import mouseHooks from 'mouse-hooks';
 
 import { ProcessWindow } from '../models';
 import { AppWindow } from '../windows';
 import { windowManager, Window } from 'node-window-manager';
 import { TOOLBAR_HEIGHT } from '~/renderer/views/app/constants/design';
 import { settings } from '..';
-
-const iohook = require('iohook');
 
 const containsPoint = (bounds: any, point: any) => {
   return (
@@ -49,15 +48,17 @@ export class Multrin {
       }
     };
 
-    ipcMain.on('select-window', (e: any, id: number) => {
+    const { id } = this.appWindow.webContents;
+
+    ipcMain.on(`select-window-${id}`, (e: any, id: number) => {
       this.selectWindow(this.windows.find(x => x.id === id));
     });
 
-    ipcMain.on('detach-window', (e: any, id: number) => {
+    ipcMain.on(`detach-window-${id}`, (e: any, id: number) => {
       this.detachWindow(this.windows.find(x => x.id === id));
     });
 
-    ipcMain.on('hide-window', () => {
+    ipcMain.on(`hide-window-${id}`, () => {
       if (this.selectedWindow) {
         this.selectedWindow.hide();
         this.isWindowHidden = true;
@@ -68,6 +69,12 @@ export class Multrin {
     this.appWindow.on('resize', updateBounds);
 
     this.appWindow.on('close', () => {
+      windowManager.removeAllListeners('window-activated');
+      mouseHooks.removeAllListeners('mouse-down');
+      mouseHooks.removeAllListeners('mouse-move');
+      mouseHooks.removeAllListeners('mouse-up');
+      clearInterval(this.interval);
+
       for (const window of this.windows) {
         this.detachWindow(window);
       }
@@ -79,8 +86,11 @@ export class Multrin {
       this.appWindow.webContents.send('select-tab', window.id);
     });
 
-    iohook.on('mousedown', () => {
-      if (this.appWindow.isMinimized()) return;
+    mouseHooks.on('mouse-down', () => {
+      if (this.appWindow.isMinimized() || this.appWindow.isFocused()) {
+        this.draggedWindow = null;
+        return;
+      }
 
       setTimeout(() => {
         if (this.appWindow.isFocused()) {
@@ -94,12 +104,13 @@ export class Multrin {
       }, 50);
     });
 
-    iohook.on('mousedrag', async (e: any) => {
+    mouseHooks.on('mouse-move', async (e: any) => {
+      if (this.appWindow.isFocused()) return;
+
       if (
         this.draggedWindow &&
         this.selectedWindow &&
-        this.draggedWindow.id === this.selectedWindow.id &&
-        !this.appWindow.isFocused()
+        this.draggedWindow.id === this.selectedWindow.id
       ) {
         const bounds = this.selectedWindow.getBounds();
         const { lastBounds } = this.selectedWindow;
@@ -113,7 +124,7 @@ export class Multrin {
           this.detachWindow(this.selectedWindow);
           this.detached = true;
 
-          iohook.once('mouseup', () => {
+          mouseHooks.once('mouse-up', () => {
             setTimeout(() => {
               win.setBounds({
                 width: win.initialBounds.width,
@@ -181,7 +192,7 @@ export class Multrin {
       }
     });
 
-    iohook.on('mouseup', async () => {
+    mouseHooks.on('mouse-up', async () => {
       this.isMoving = false;
 
       if (this.isUpdatingContentBounds) {
