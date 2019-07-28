@@ -1,7 +1,7 @@
 import { BrowserView, app } from 'electron';
 import { appWindow, settings } from '.';
 import { engine } from './services/adblock';
-import { parse } from 'tldts';
+import { parse } from 'tldts-experimental';
 import { getViewMenu } from './menus/view';
 
 export class View extends BrowserView {
