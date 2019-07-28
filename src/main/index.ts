@@ -1,11 +1,10 @@
 import { ipcMain, app, Menu, session } from 'electron';
 import { resolve, extname } from 'path';
 import { platform, homedir } from 'os';
-import { extensionsMain } from 'electron-extensions';
 
 import { AppWindow } from './windows/app';
 import { runAdblockService } from './services';
-import { existsSync, writeFileSync, promises, mkdirSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { getPath } from '~/utils/paths';
 import { ISettings } from '~/interfaces';
 import { makeId } from '~/utils/string';
@@ -149,20 +148,6 @@ app.on('ready', async () => {
       }
     });
   });
-
-  extensionsMain.setSession(viewSession);
-
-  const extensionsPath = getPath('extensions');
-
-  if (!existsSync(extensionsPath)) {
-    mkdirSync(extensionsPath);
-  } else {
-    const dirs = await promises.readdir(extensionsPath);
-
-    for (const dir of dirs) {
-      extensionsMain.load(resolve(extensionsPath, dir));
-    }
-  }
 
   runAutoUpdaterService(appWindow);
   runAdblockService(viewSession);
