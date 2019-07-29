@@ -101,7 +101,7 @@ const renderer = name => {
   let instructions = `> [renderer/views/${name}/index.tsx]`;
 
   if (production) {
-    instructions = `> renderer/views/${name}/index.tsx -node-vibrant -electron -electron-extensions -styled-components`;
+    instructions = `> renderer/views/${name}/index.tsx -node-vibrant -electron -electron-extensions -styled-components -node-bookmarks-parser`;
   }
 
   const app = fuse.bundle(name).instructions(instructions);

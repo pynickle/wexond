@@ -86,7 +86,7 @@
     "mobx-react-lite": "1.4.1",
     "mouse-hooks": "0.4.1",
     "nedb": "1.8.0",
-    "node-bookmarks-parser": "1.0.1",
+    "node-bookmarks-parser": "2.0.0",
     "node-vibrant": "3.2.0-alpha",
     "node-window-manager": "1.0.4",
     "pretty-bytes": "5.3.0",
