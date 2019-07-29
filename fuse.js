@@ -58,7 +58,11 @@ const getCopyPlugin = () => {
 const main = () => {
   const fuse = FuseBox.init(getConfig('server', 'main'));
 
-  const app = fuse.bundle('main').instructions(`> [main/index.ts]`);
+  const app = fuse
+    .bundle('main')
+    .instructions(
+      `> [main/index.ts] +nedb +tldts-experimental +@cliqz/adblocker`,
+    );
 
   if (!production) {
     app.watch();
@@ -89,7 +93,9 @@ const renderer = name => {
 
   const app = fuse
     .bundle(name)
-    .instructions(`> [renderer/views/${name}/index.tsx]`);
+    .instructions(
+      `> renderer/views/${name}/index.tsx -electron -styled-components -node-vibrant`,
+    );
 
   if (!production) {
     if (name === 'app') {
